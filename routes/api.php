@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-// Route::middleware('throttle:1,1')->get('/drugs/search', [DrugSearchController::class, 'search']);
-Route::middleware([CustomThrottleRequests::class . ':1,1'])
+Route::middleware([CustomThrottleRequests::class . ':10,1'])
     ->get('/drugs/search', [DrugSearchController::class, 'search']);
 
 Route::middleware('auth:sanctum')->group(function () {

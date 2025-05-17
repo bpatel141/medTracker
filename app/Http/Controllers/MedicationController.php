@@ -53,7 +53,7 @@ class MedicationController extends Controller
     {
         $drugs = $request->user()->medications;
         try {
-            return $drugs->map(function ($med) {
+            $drugData =  $drugs->map(function ($med) {
                 $cacheKey = 'rxcui_status_' . $med->rxcui;
                     $statusData = Cache::remember($cacheKey, 1440, function () use ($med) {
                         $statusUrl = 'https://rxnav.nlm.nih.gov/REST/rxcui/' . $med->rxcui . '/historystatus.json';
@@ -73,6 +73,8 @@ class MedicationController extends Controller
                     'dose_forms_group' => array_column($statusData['definitionalFeatures']['doseFormGroupConcept'] ?? [], 'doseFormGroupName'),
                 ];
             });
+            return $this->successResponse($drugData,'Success');
+
         } catch (\Throwable $ex) {
             Log::error("Error fetching user medication: " . $ex->getMessage());
             return $this->errorResponse([],'Something went wrong');

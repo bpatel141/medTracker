@@ -23,7 +23,7 @@ class DrugSearchController extends Controller
         $drugName = $request->input('drug_name');
         $cacheKey = 'drug_' . strtolower($drugName);
         try {
-            $results = Cache::remember($cacheKey, 3600, function () use ($drugName,$request) {
+            $results = Cache::remember($cacheKey, 1440, function () use ($drugName,$request) {
                 $getDrugsUrl = 'https://rxnav.nlm.nih.gov/REST/drugs.json?name=' . urlencode($drugName);
                 $getDrugsRes = Http::get($getDrugsUrl);
     
